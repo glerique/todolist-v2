@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Form\TaskType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,6 +31,14 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $user = $this->getUser();
+            
+            if ($user == null){
+                $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => 'anonyme']);                            
+            }
+
+            $task->setUser($user);
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($task);
