@@ -21,6 +21,27 @@ class TaskController extends AbstractController
     }
 
     /**
+     * @Route("/todo", name="todo_task_list")
+     */
+    public function todoListAction()
+    {
+        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 0])]);
+        
+    }
+
+    /**
+     * @Route("/done", name="done_task_list")
+     */
+    public function doneListAction()
+    {
+        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 1])]);
+        
+    }
+
+
+    
+
+    /**
      * @Route("/tasks/create", name="task_create")
      */
     public function createAction(Request $request)
@@ -93,6 +114,7 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task)
     {
+        $this->denyAccessUnlessGranted('DELETE', $task);
         $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();

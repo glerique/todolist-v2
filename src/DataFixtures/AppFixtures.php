@@ -19,13 +19,24 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         
+        $admin = new User();
+        $password = $this->encoder->encodePassword($admin, 'password');        
+        $admin->setUsername('admin');
+        $admin->setPassword($password);
+        $admin->setEmail('admin@totodolist.fr');
+        $admin->setRoles(['ROLE_ADMIN']);
         
+        $manager->persist($admin);
+
+
+
         $anonyme = new User();
         $password = $this->encoder->encodePassword($anonyme, 'password');        
         $anonyme->setUsername('anonyme');
         $anonyme->setPassword($password);
         $anonyme->setEmail('anonyme@totodolist.fr');
-
+        $anonyme->setRoles(['ROLE_USER']);
+        
         $manager->persist($anonyme);
         
         for ($u = 1; $u < 11; $u++) {
@@ -33,7 +44,8 @@ class AppFixtures extends Fixture
             $password = $this->encoder->encodePassword($user, 'password');
             $user->setUsername("User$u");
             $user->setPassword("$password");
-            $user->setEmail("user$u@todolist.fr");                            
+            $user->setEmail("user$u@todolist.fr");
+            $user->setRoles(['ROLE_USER']);                            
 
             $manager->persist($user);
             $users[] = $user;
