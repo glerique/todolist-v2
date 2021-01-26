@@ -6,7 +6,7 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Form\TaskType;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
@@ -17,7 +17,6 @@ class TaskController extends AbstractController
     public function listAction()
     {
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
-        
     }
 
     /**
@@ -26,7 +25,6 @@ class TaskController extends AbstractController
     public function todoListAction()
     {
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 0])]);
-        
     }
 
     /**
@@ -35,11 +33,10 @@ class TaskController extends AbstractController
     public function doneListAction()
     {
         return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findBy(['isDone' => 1])]);
-        
     }
 
 
-    
+
 
     /**
      * @Route("/tasks/create", name="task_create")
@@ -52,16 +49,10 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $user = $this->getUser();
-            
-            if ($user == null){
-                $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => 'anonyme']);                            
-            }
-
             $task->setUser($user);
+            
             $em = $this->getDoctrine()->getManager();
-
             $em->persist($task);
             $em->flush();
 
@@ -79,7 +70,13 @@ class TaskController extends AbstractController
     public function editAction(Task $task, Request $request)
     {
         $form = $this->createForm(TaskType::class, $task);
-
+        $user = $task->getUser();
+        
+        if ($user == null) {
+            $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username' => 'anonyme']);
+            $task->setUser($user);
+        }
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

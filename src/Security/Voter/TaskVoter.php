@@ -35,11 +35,8 @@ class TaskVoter extends Voter
             return false;
         }
 
-        
-
         switch ($attribute) {
-            case 'VIEW':
-                       
+                           
             case 'DELETE':
                 
                 if ($subject->getUser() === $user) {
@@ -48,12 +45,8 @@ class TaskVoter extends Voter
 
                 if ($this->security->isGranted('ROLE_ADMIN') 
                     && $subject->getUser()->getUsername() === "anonyme") { 
-                    return true; 
-                }
-                
-                return false;
-        }
-
-        return false;
+                    return true;
+                }                
+        }  
     }
 }
