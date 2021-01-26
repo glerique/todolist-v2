@@ -26,18 +26,17 @@ class AppFixtures extends Fixture
         $admin->setEmail('admin@totodolist.fr');
         $admin->setRoles(['ROLE_ADMIN']);
         
-        $manager->persist($admin);
-
+        $manager->persist($admin);        
 
 
         $anonyme = new User();
         $password = $this->encoder->encodePassword($anonyme, 'password');        
         $anonyme->setUsername('anonyme');
         $anonyme->setPassword($password);
-        $anonyme->setEmail('anonyme@totodolist.fr');
-        $anonyme->setRoles(['ROLE_USER']);
+        $anonyme->setEmail('anonyme@totodolist.fr');        
         
         $manager->persist($anonyme);
+
         
         for ($u = 1; $u < 11; $u++) {
             $user = new User();
@@ -45,21 +44,31 @@ class AppFixtures extends Fixture
             $user->setUsername("User$u");
             $user->setPassword("$password");
             $user->setEmail("user$u@todolist.fr");
-            $user->setRoles(['ROLE_USER']);                            
-
             $manager->persist($user);
             $users[] = $user;
         }
+
         
-        
+        for ($a = 1; $a < 5; $a++) {            
+             
+            $task = new Task();
+            $task->setCreatedAt(new \DateTime('now'));            
+            $task->setTitle("Title anonyme$a");
+            $task->setContent("Content anonyme$a");
+            $task->toggle(rand(0,1));
+            if ($a == 1 or $a == 2 or $a == 3 ){ $task->setUser($anonyme); } 
+            $manager->persist($task);
+           
+        }
+
         for ($i = 1; $i < 11; $i++) {
-            $user = $users[mt_rand(0, count($users) - 1)];
+            $user = $users[mt_rand(4, count($users) - 1)];
 
             $task = new Task();
             $task->setCreatedAt(new \DateTime('now'));            
-            $task->setTitle("title$i");
-            $task->setContent("Content$i");
-            $task->toggle(rand(0,1));                
+            $task->setTitle("Title user$i");
+            $task->setContent("Content user$i");
+            $task->toggle(rand(0,1)); 
             $task->setUser($user);
             $manager->persist($task);
            
