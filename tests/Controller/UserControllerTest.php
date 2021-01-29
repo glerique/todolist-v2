@@ -71,7 +71,7 @@ class UserControllerTest extends WebTestCase
         $form['user[password][first]'] = "password";
         $form['user[password][second]'] = "password";
         $form['user[email]'] = "username@todolist.fr";
-        $form['user[roles]'];        
+        $form['user[roles]'] = ["ROLE_USER", "ROLE_ADMIN"];        
         $client->submit($form);
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
