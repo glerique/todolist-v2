@@ -46,4 +46,10 @@ Utilisateurs par défaut
         username : user1
         password : password
     
+<hr />
+
+Contribution
+	    
+Si vous souhaitez contribuer à ce projet, merci de consulter <a href="https://github.com/glerique/todolist-v2/blob/main/contribution.md">le guide de contribution</a>
+    
     
